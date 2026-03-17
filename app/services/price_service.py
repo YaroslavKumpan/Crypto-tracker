@@ -1,4 +1,5 @@
 import time
+
 from app.db.models import Price
 
 

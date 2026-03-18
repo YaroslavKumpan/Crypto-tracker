@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: crypto
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db

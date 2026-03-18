@@ -1,6 +1,7 @@
 import time
 
 from app.db.models import Price
+from app.utils.time import get_current_timestamp
 
 
 class PriceService:
@@ -11,7 +12,7 @@ class PriceService:
         obj = Price(
             ticker=ticker,
             price=price,
-            timestamp=int(time.time())
+            timestamp=get_current_timestamp()
         )
         await self.repo.create(obj)
 

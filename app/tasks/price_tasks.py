@@ -2,9 +2,9 @@ import asyncio
 import logging
 import time
 
-import aiohttp
 from celery import Celery
 
+from app.clients.deribit import DeribitClient
 from app.core.config import settings
 from app.db.models import Price
 from app.db.sync_session import SessionLocal
@@ -26,34 +26,9 @@ celery_app.conf.beat_schedule = {
 }
 
 
-DERIBIT_URL = "https://www.deribit.com/api/v2/public/get_index_price"
-
-
-async def fetch_price(session: aiohttp.ClientSession, index_name: str) -> float:
-    params = {"index_name": index_name}
-
-    async with session.get(DERIBIT_URL, params=params, timeout=10) as response:
-        if response.status != 200:
-            raise Exception(f"HTTP error {response.status}")
-
-        data = await response.json()
-
-        if "result" not in data:
-            raise Exception(f"Invalid response: {data}")
-
-        return data["result"]["index_price"]
-
-
 async def fetch_all_prices():
-    async with aiohttp.ClientSession() as session:
-        btc_task = fetch_price(session, "btc_usd")
-        eth_task = fetch_price(session, "eth_usd")
-
-        return await asyncio.gather(
-            btc_task,
-            eth_task,
-            return_exceptions=True,
-        )
+    client = DeribitClient()
+    return await client.get_prices(["btc_usd", "eth_usd"])
 
 
 @celery_app.task(bind=True, autoretry_for=(Exception,), retry_backoff=5, retry_kwargs={"max_retries": 3})

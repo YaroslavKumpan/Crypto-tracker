@@ -81,6 +81,8 @@ DB_URL=postgresql+asyncpg://user:password@db:5432/crypto
 REDIS_URL=redis://redis:6379/0
 ```
 
+Для локального тестирования можно использовать те же значения.
+
 ---
 
 ### 3. Запуск проекта
@@ -114,7 +116,7 @@ GET /prices?ticker=btc_usd
 ### 🔹 2. Получить последнюю цену
 
 ```
-GET /price/latest?ticker=btc_usd
+GET /prices/latest?ticker=btc_usd
 ```
 
 ---
@@ -130,7 +132,8 @@ GET /prices/filter?ticker=btc_usd&start=1700000000&end=1700001000
 ## 🧪 Тестирование
 
 ```bash
-pytest
+poetry install --with dev
+poetry run pytest
 ```
 
 ---

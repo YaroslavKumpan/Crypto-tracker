@@ -64,3 +64,13 @@ def test_get_filtered_ok(override_service):
     )
     assert resp.status_code == 200
     assert resp.json()[0]["timestamp"] == 1700000000
+
+
+def test_get_filtered_invalid_range(override_service):
+    client = TestClient(app)
+    resp = client.get(
+        "/prices/filter",
+        params={"ticker": "btc_usd", "from_ts": 1700010000, "to_ts": 1699990000},
+    )
+    assert resp.status_code == 400
+    assert "Invalid range" in resp.json()["detail"]

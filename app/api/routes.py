@@ -20,6 +20,11 @@ def validate_ticker(ticker: str):
         raise HTTPException(status_code=400, detail="Invalid ticker")
 
 
+def validate_range(from_ts: int, to_ts: int):
+    if from_ts > to_ts:
+        raise HTTPException(status_code=400, detail="Invalid range: from_ts must be <= to_ts")
+
+
 @router.get("/prices", response_model=list[PriceResponse])
 async def get_all(
     ticker: str = Query(...),
@@ -58,6 +63,7 @@ async def get_filtered(
     service: PriceService = Depends(get_service),
 ):
     validate_ticker(ticker)
+    validate_range(from_ts, to_ts)
 
     data = await service.get_filtered(ticker, from_ts, to_ts)
 

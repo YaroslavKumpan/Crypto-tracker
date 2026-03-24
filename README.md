@@ -124,7 +124,7 @@ GET /prices/latest?ticker=btc_usd
 ### 🔹 3. Получить цены по дате
 
 ```
-GET /prices/filter?ticker=btc_usd&start=1700000000&end=1700001000
+GET /prices/filter?ticker=btc_usd&from_ts=1700000000&to_ts=1700001000
 ```
 
 ---

@@ -1,5 +1,3 @@
-import time
-
 from app.db.models import Price
 from app.utils.time import get_current_timestamp
 

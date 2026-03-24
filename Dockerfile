@@ -11,8 +11,10 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-ENV PYTHONPATH=/app
+RUN chmod +x entrypoint.sh && \
+    sed -i 's/\r$//' entrypoint.sh && \
+    sed -i 's/\r$//' alembic.ini
 
-RUN chmod +x entrypoint.sh
+ENV PYTHONPATH=/app
 
 ENTRYPOINT ["/app/entrypoint.sh"]
